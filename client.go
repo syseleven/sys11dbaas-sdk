@@ -9,6 +9,13 @@ import (
 	"time"
 )
 
+type AuthMode string
+
+const (
+	AuthModeApiKey AuthMode = "apikey"
+	AuthModeSSO    AuthMode = "sso"
+)
+
 type errorMsg struct {
 	Status  string `json:"status"`
 	Code    int    `json:"code"`
@@ -16,19 +23,21 @@ type errorMsg struct {
 }
 
 type Client struct {
-	baseUrl string
-	apiKey  string
-	user    string
-	client  *http.Client
-	agent   string
+	baseUrl  string
+	apiKey   string
+	user     string
+	client   *http.Client
+	agent    string
+	authMode AuthMode
 }
 
-func NewClient(baseurl, apikey, agent string) (*Client, error) {
+func NewClient(baseurl, apikey, agent string, authMode AuthMode) (*Client, error) {
 	client := &Client{
-		baseUrl: baseurl,
-		apiKey:  apikey,
-		user:    apikey,
-		agent:   agent,
+		baseUrl:  baseurl,
+		apiKey:   apikey,
+		user:     apikey,
+		agent:    agent,
+		authMode: authMode,
 	}
 	client.client = &http.Client{
 		Timeout: 60 * time.Second,
@@ -70,7 +79,11 @@ func (c *Client) patch(path string, data []byte) ([]byte, error) {
 
 func (c *Client) doReq(req *http.Request) ([]byte, error) {
 	req.Header.Add("Accept", "application/json")
-	req.Header.Add("x-s11-api-key", c.apiKey)
+	if c.authMode == AuthModeApiKey {
+		req.Header.Add("x-s11-api-key", c.apiKey)
+	} else if c.authMode == AuthModeSSO {
+		req.Header.Add("Authorization", "Bearer "+c.apiKey)
+	}
 	req.Header.Add("User-Agent", c.agent)
 	resp, err := c.client.Do(req)
 	if err != nil {
