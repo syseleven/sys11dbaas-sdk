@@ -64,6 +64,7 @@ func (c *Client) delete(path string, verbose bool) ([]byte, error) {
 
 func (c *Client) post(path string, data []byte, verbose bool) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodPost, c.baseUrl+path, bytes.NewReader(data))
+	req.Header.Set("Content-Type", "application/json")
 	if err != nil {
 		return nil, err
 	}
@@ -72,6 +73,7 @@ func (c *Client) post(path string, data []byte, verbose bool) ([]byte, error) {
 
 func (c *Client) patch(path string, data []byte, verbose bool) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodPatch, c.baseUrl+path, bytes.NewReader(data))
+	req.Header.Set("Content-Type", "application/json")
 	if err != nil {
 		return nil, err
 	}
