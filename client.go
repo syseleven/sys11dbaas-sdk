@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -45,39 +46,39 @@ func NewClient(baseurl, apikey, agent string, authMode AuthMode) (*Client, error
 	return client, nil
 }
 
-func (c *Client) get(path string) ([]byte, error) {
+func (c *Client) get(path string, verbose bool) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodGet, c.baseUrl+path, nil)
 	if err != nil {
 		return nil, err
 	}
-	return c.doReq(req)
+	return c.doReq(req, verbose)
 }
 
-func (c *Client) delete(path string) ([]byte, error) {
+func (c *Client) delete(path string, verbose bool) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodDelete, c.baseUrl+path, nil)
 	if err != nil {
 		return nil, err
 	}
-	return c.doReq(req)
+	return c.doReq(req, verbose)
 }
 
-func (c *Client) post(path string, data []byte) ([]byte, error) {
+func (c *Client) post(path string, data []byte, verbose bool) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodPost, c.baseUrl+path, bytes.NewReader(data))
 	if err != nil {
 		return nil, err
 	}
-	return c.doReq(req)
+	return c.doReq(req, verbose)
 }
 
-func (c *Client) patch(path string, data []byte) ([]byte, error) {
+func (c *Client) patch(path string, data []byte, verbose bool) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodPatch, c.baseUrl+path, bytes.NewReader(data))
 	if err != nil {
 		return nil, err
 	}
-	return c.doReq(req)
+	return c.doReq(req, verbose)
 }
 
-func (c *Client) doReq(req *http.Request) ([]byte, error) {
+func (c *Client) doReq(req *http.Request, verbose bool) ([]byte, error) {
 	req.Header.Add("Accept", "application/json")
 	if c.authMode == AuthModeApiKey {
 		req.Header.Add("x-s11-api-key", c.apiKey)
@@ -90,6 +91,9 @@ func (c *Client) doReq(req *http.Request) ([]byte, error) {
 		return nil, err
 	}
 	respBody, err := io.ReadAll(resp.Body)
+	if verbose {
+		fmt.Printf("status: %s\nraw response:\n%s\n", resp.Status, respBody)
+	}
 	if err != nil {
 		return nil, err
 	}

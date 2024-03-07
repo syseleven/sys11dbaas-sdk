@@ -6,7 +6,7 @@ import (
 
 func (c *Client) GetPostgreSQLDB(grq *GetPostgreSQLRequest) (*GetPostgreSQLResponse, error) {
 	path := "/" + grq.Organization + "/" + grq.Project + "/v1/databases/" + grq.UUID
-	data, err := c.get(path)
+	data, err := c.get(path, grq.Verbose)
 	if err != nil {
 		return nil, err
 	}
@@ -19,7 +19,7 @@ func (c *Client) GetPostgreSQLDB(grq *GetPostgreSQLRequest) (*GetPostgreSQLRespo
 
 func (c *Client) ListPostgreSQLDBs(grq *GetPostgreSQLsRequest) ([]*GetPostgreSQLResponse, error) {
 	path := "/" + grq.Organization + "/" + grq.Project + "/v1/databases"
-	data, err := c.get(path)
+	data, err := c.get(path, grq.Verbose)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func (c *Client) CreatePostgreSQLDB(crq *CreatePostgreSQLRequest) (*CreatePostgr
 		return nil, err
 	}
 
-	responseData, err := c.post(path, data)
+	responseData, err := c.post(path, data, crq.Verbose)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *Client) CreatePostgreSQLDB(crq *CreatePostgreSQLRequest) (*CreatePostgr
 
 func (c *Client) DeletePostgreSQLDB(drq *DeletePostgreSQLRequest) (*DeletePostgreSQLResponse, error) {
 	path := "/" + drq.Organization + "/" + drq.Project + "/v1/databases/" + drq.UUID
-	_, err := c.delete(path)
+	_, err := c.delete(path, drq.Verbose)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (c *Client) UpdatePostgreSQLDB(urq *UpdatePostgreSQLRequest) (*UpdatePostgr
 		return nil, err
 	}
 
-	_, err = c.patch(path, data)
+	_, err = c.patch(path, data, urq.Verbose)
 	if err != nil {
 		return nil, err
 	}

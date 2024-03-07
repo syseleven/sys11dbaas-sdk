@@ -11,23 +11,27 @@ type CreatePostgreSQLRequest struct {
 	ApplicationConfig *PSQLApplicationConfigRequest `json:"application_config,omitempty"`
 	Name              string                        `json:"name,omitempty"`
 	Description       string                        `json:"description,omitempty"`
+	Verbose           bool                          `json:"-"`
 }
 
 type GetPostgreSQLRequest struct {
 	Organization string `json:"-"`
 	Project      string `json:"-"`
 	UUID         string `json:"-"`
+	Verbose      bool   `json:"-"`
 }
 
 type GetPostgreSQLsRequest struct {
 	Organization string `json:"-"`
 	Project      string `json:"-"`
+	Verbose      bool   `json:"-"`
 }
 
 type DeletePostgreSQLRequest struct {
 	Organization string `json:"-"`
 	Project      string `json:"-"`
 	UUID         string `json:"-"`
+	Verbose      bool   `json:"-"`
 }
 
 type UpdatePostgreSQLRequest struct {
@@ -38,6 +42,7 @@ type UpdatePostgreSQLRequest struct {
 	Name              string                              `json:"name,omitempty"`
 	Description       string                              `json:"description,omitempty"`
 	UUID              string                              `json:"-"`
+	Verbose           bool                                `json:"-"`
 }
 
 // responses
