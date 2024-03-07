@@ -50,6 +50,8 @@ type CreatePostgreSQLResponse struct {
 	ServiceConfig     *PSQLServiceConfigResponse     `json:"service_config,omitempty"`
 	ApplicationConfig *PSQLApplicationConfigResponse `json:"application_config,omitempty"`
 	Status            string                         `json:"status,omitempty"`
+	Phase             string                         `json:"phase,omitempty"`
+	ResourceStatus    string                         `json:"resource_status,omitempty"`
 	Name              string                         `json:"name,omitempty"`
 	Description       string                         `json:"description,omitempty"`
 	UUID              string                         `json:"uuid,omitempty"`
@@ -63,6 +65,8 @@ type GetPostgreSQLResponse struct {
 	ServiceConfig     *PSQLServiceConfigResponse     `json:"service_config,omitempty"`
 	ApplicationConfig *PSQLApplicationConfigResponse `json:"application_config,omitempty"`
 	Status            string                         `json:"status,omitempty"`
+	Phase             string                         `json:"phase,omitempty"`
+	ResourceStatus    string                         `json:"resource_status,omitempty"`
 	Name              string                         `json:"name,omitempty"`
 	Description       string                         `json:"description,omitempty"`
 	UUID              string                         `json:"uuid,omitempty"`
