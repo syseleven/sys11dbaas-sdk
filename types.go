@@ -136,6 +136,7 @@ type PSQLApplicationConfigResponse struct {
 	Hostname         string                `json:"hostname,omitempty"`
 	IPAddress        string                `json:"ip_address,omitempty"`
 	ScheduledBackups *PSQLScheduledBackups `json:"scheduled_backups,omitempty"`
+	Recovery         *PSQLRecovery         `json:"recovery,omitempty"`
 }
 
 type PSQLScheduledBackups struct {
