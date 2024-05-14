@@ -192,4 +192,7 @@ const (
 	SERVICE_TYPE_DB = "database"
 
 	APP_TYPE_PSQL = "postgresql"
+
+	STATE_NOT_READY = "ClusterIsNotReady"
+	STATE_READY     = "ClusterIsReady"
 )
