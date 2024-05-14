@@ -32,7 +32,7 @@ type Client struct {
 	authMode AuthMode
 }
 
-func NewClient(baseurl, apikey, agent string, authMode AuthMode) (*Client, error) {
+func NewClient(baseurl, apikey, agent string, timeoutSeconds int, authMode AuthMode) (*Client, error) {
 	client := &Client{
 		baseUrl:  baseurl,
 		apiKey:   apikey,
@@ -41,7 +41,7 @@ func NewClient(baseurl, apikey, agent string, authMode AuthMode) (*Client, error
 		authMode: authMode,
 	}
 	client.client = &http.Client{
-		Timeout: 60 * time.Second,
+		Timeout: time.Duration(timeoutSeconds) * time.Second,
 	}
 	return client, nil
 }
