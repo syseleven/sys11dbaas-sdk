@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -40,10 +41,20 @@ func NewClient(baseurl, apikey, agent string, timeoutSeconds int, authMode AuthM
 		agent:    agent,
 		authMode: authMode,
 	}
+
 	client.client = &http.Client{
 		Timeout: time.Duration(timeoutSeconds) * time.Second,
 	}
+
+	if _, ok := os.LookupEnv("SYS11DBAAS_SDK_DEBUG"); ok {
+		client.WithRequestLogging()
+	}
+
 	return client, nil
+}
+
+func (c *Client) WithRequestLogging() {
+	c.client.Transport = &requestLoggingTransport{}
 }
 
 func (c *Client) get(path string, verbose bool) ([]byte, error) {
