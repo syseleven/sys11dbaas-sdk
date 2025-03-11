@@ -103,12 +103,19 @@ func (c *Client) doReq(req *http.Request, verbose bool) ([]byte, error) {
 		if resp.StatusCode == http.StatusUnauthorized {
 			return nil, errors.New("authentication failed")
 		}
-		e := &errorMsg{}
-		err := json.Unmarshal(respBody, e)
-		if err != nil {
-			return nil, err
+
+		var errMsg string
+		if resp.Header.Get("Content-Type") == "application/json" {
+			e := &errorMsg{}
+			err := json.Unmarshal(respBody, e)
+			if err != nil {
+				return nil, err
+			}
+			errMsg = e.Message
+		} else {
+			errMsg = string(respBody)
 		}
-		return respBody, errors.New(e.Message)
+		return respBody, errors.New(errMsg)
 	}
 	return respBody, nil
 }
