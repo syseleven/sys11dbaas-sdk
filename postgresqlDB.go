@@ -5,7 +5,7 @@ import (
 )
 
 func (c *Client) GetPostgreSQLDB(grq *GetPostgreSQLRequest) (*GetPostgreSQLResponse, error) {
-	path := "/" + grq.Organization + "/" + grq.Project + "/v1/databases/" + grq.UUID
+	path := "/" + grq.Organization + "/" + grq.Project + "/v2/databases/" + grq.UUID
 	data, err := c.get(path, grq.Verbose)
 	if err != nil {
 		return nil, err
@@ -18,7 +18,7 @@ func (c *Client) GetPostgreSQLDB(grq *GetPostgreSQLRequest) (*GetPostgreSQLRespo
 }
 
 func (c *Client) ListPostgreSQLDBs(grq *GetPostgreSQLsRequest) ([]*GetPostgreSQLResponse, error) {
-	path := "/" + grq.Organization + "/" + grq.Project + "/v1/databases"
+	path := "/" + grq.Organization + "/" + grq.Project + "/v2/databases"
 	data, err := c.get(path, grq.Verbose)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (c *Client) ListPostgreSQLDBs(grq *GetPostgreSQLsRequest) ([]*GetPostgreSQL
 }
 
 func (c *Client) CreatePostgreSQLDB(crq *CreatePostgreSQLRequest) (*CreatePostgreSQLResponse, error) {
-	path := "/" + crq.Organization + "/" + crq.Project + "/v1/databases"
+	path := "/" + crq.Organization + "/" + crq.Project + "/v2/databases"
 
 	data, err := json.Marshal(crq)
 	if err != nil {
@@ -50,7 +50,7 @@ func (c *Client) CreatePostgreSQLDB(crq *CreatePostgreSQLRequest) (*CreatePostgr
 }
 
 func (c *Client) DeletePostgreSQLDB(drq *DeletePostgreSQLRequest) (*DeletePostgreSQLResponse, error) {
-	path := "/" + drq.Organization + "/" + drq.Project + "/v1/databases/" + drq.UUID
+	path := "/" + drq.Organization + "/" + drq.Project + "/v2/databases/" + drq.UUID
 	_, err := c.delete(path, drq.Verbose)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (c *Client) DeletePostgreSQLDB(drq *DeletePostgreSQLRequest) (*DeletePostgr
 }
 
 func (c *Client) UpdatePostgreSQLDB(urq *UpdatePostgreSQLRequest) (*UpdatePostgreSQLResponse, error) {
-	path := "/" + urq.Organization + "/" + urq.Project + "/v1/databases/" + urq.UUID
+	path := "/" + urq.Organization + "/" + urq.Project + "/v2/databases/" + urq.UUID
 
 	data, err := json.Marshal(urq)
 	if err != nil {

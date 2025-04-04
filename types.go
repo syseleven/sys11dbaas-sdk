@@ -89,7 +89,6 @@ type UpdatePostgreSQLResponse struct {
 type PSQLServiceConfigRequest struct {
 	Disksize          *int               `json:"disksize,omitempty"`
 	MaintenanceWindow *MaintenanceWindow `json:"maintenance_window,omitempty"`
-	RemoteIPs         []string           `json:"remote_ips,omitempty"`
 	Type              string             `json:"type,omitempty"`
 	Flavor            string             `json:"flavor,omitempty"`
 	Region            string             `json:"region,omitempty"`
@@ -98,7 +97,6 @@ type PSQLServiceConfigRequest struct {
 type PSQLServiceConfigUpdateRequest struct {
 	Disksize          *int               `json:"disksize,omitempty"`
 	MaintenanceWindow *MaintenanceWindow `json:"maintenance_window,omitempty"`
-	RemoteIPs         []string           `json:"remote_ips,omitempty"`
 	Type              string             `json:"type,omitempty"`
 	Flavor            string             `json:"flavor,omitempty"`
 }
@@ -106,37 +104,40 @@ type PSQLServiceConfigUpdateRequest struct {
 type PSQLServiceConfigResponse struct {
 	Disksize          *int               `json:"disksize,omitempty"`
 	MaintenanceWindow *MaintenanceWindow `json:"maintenance_window,omitempty"`
-	RemoteIPs         []string           `json:"remote_ips,omitempty"`
 	Type              string             `json:"type,omitempty"`
 	Flavor            string             `json:"flavor,omitempty"`
 	Region            string             `json:"region,omitempty"`
 }
 
 type PSQLApplicationConfigRequest struct {
-	Type             string                `json:"type,omitempty"`
-	Password         string                `json:"password,omitempty"`
-	Instances        *int                  `json:"instances,omitempty"`
-	Version          string                `json:"version,omitempty"`
-	ScheduledBackups *PSQLScheduledBackups `json:"scheduled_backups,omitempty"`
-	Recovery         *PSQLRecovery         `json:"recovery,omitempty"`
+	Type                 string                           `json:"type,omitempty"`
+	Password             string                           `json:"password,omitempty"`
+	Instances            *int                             `json:"instances,omitempty"`
+	Version              string                           `json:"version,omitempty"`
+	ScheduledBackups     *PSQLScheduledBackups            `json:"scheduled_backups,omitempty"`
+	Recovery             *PSQLRecovery                    `json:"recovery,omitempty"`
+	PrivateNetworkConfig *PSQLPrivateNetworkConfigRequest `json:"private_networking,omitempty"`
+	PublicNetworkConfig  *PSQLPublicNetworkConfigRequest  `json:"public_networking,omitempty"`
 }
 
 type PSQLApplicationConfigUpdateRequest struct {
-	Password         string                `json:"password,omitempty"`
-	Instances        *int                  `json:"instances,omitempty"`
-	Version          string                `json:"version,omitempty"`
-	ScheduledBackups *PSQLScheduledBackups `json:"scheduled_backups,omitempty"`
+	Password             string                           `json:"password,omitempty"`
+	Instances            *int                             `json:"instances,omitempty"`
+	Version              string                           `json:"version,omitempty"`
+	ScheduledBackups     *PSQLScheduledBackups            `json:"scheduled_backups,omitempty"`
+	PrivateNetworkConfig *PSQLPrivateNetworkConfigRequest `json:"private_networking,omitempty"`
+	PublicNetworkConfig  *PSQLPublicNetworkConfigRequest  `json:"public_networking,omitempty"`
 }
 
 type PSQLApplicationConfigResponse struct {
-	Type             string                `json:"type,omitempty"`
-	Password         string                `json:"password,omitempty"`
-	Instances        *int                  `json:"instances,omitempty"`
-	Version          string                `json:"version,omitempty"`
-	Hostname         string                `json:"hostname,omitempty"`
-	IPAddress        string                `json:"ip_address,omitempty"`
-	ScheduledBackups *PSQLScheduledBackups `json:"scheduled_backups,omitempty"`
-	Recovery         *PSQLRecovery         `json:"recovery,omitempty"`
+	Type                 string                            `json:"type,omitempty"`
+	Password             string                            `json:"password,omitempty"`
+	Instances            *int                              `json:"instances,omitempty"`
+	Version              string                            `json:"version,omitempty"`
+	ScheduledBackups     *PSQLScheduledBackups             `json:"scheduled_backups,omitempty"`
+	Recovery             *PSQLRecovery                     `json:"recovery,omitempty"`
+	PrivateNetworkConfig *PSQLPrivateNetworkConfigResponse `json:"private_networking,omitempty"`
+	PublicNetworkConfig  *PSQLPublicNetworkConfigResponse  `json:"public_networking,omitempty"`
 }
 
 type PSQLScheduledBackups struct {
@@ -162,6 +163,32 @@ type PSQLRecovery struct {
 	TargetLSN  string     `json:"targetLSN,omitempty"`
 	TargetXID  string     `json:"targetXID,omitempty"`
 	TargetTime *time.Time `json:"targetTime,omitempty"`
+}
+
+type PSQLPrivateNetworkConfigRequest struct {
+	Enabled          bool      `json:"enabled"`
+	AllowedCIDRs     *[]string `json:"allowed_cidrs,omitempty"`
+	SharedSubnetCIDR *string   `json:"shared_subnet_cidr,omitempty"`
+}
+
+type PSQLPrivateNetworkConfigResponse struct {
+	Enabled          bool      `json:"enabled"`
+	AllowedCIDRs     *[]string `json:"allowed_cidrs,omitempty"`
+	SharedSubnetCIDR *string   `json:"shared_subnet_cidr,omitempty"`
+	Hostname         string    `json:"hostname,omitempty"`
+	IPAddress        string    `json:"ip_address,omitempty"`
+}
+
+type PSQLPublicNetworkConfigRequest struct {
+	Enabled      bool      `json:"enabled"`
+	AllowedCIDRs *[]string `json:"allowed_cidrs,omitempty"`
+}
+
+type PSQLPublicNetworkConfigResponse struct {
+	Enabled      bool      `json:"enabled"`
+	AllowedCIDRs *[]string `json:"allowed_cidrs,omitempty"`
+	Hostname     string    `json:"hostname,omitempty"`
+	IPAddress    string    `json:"ip_address,omitempty"`
 }
 
 // pointer
