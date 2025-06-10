@@ -276,34 +276,34 @@ type PSQLServiceConfigResponseV2 struct {
 }
 
 type PSQLApplicationConfigRequestV2 struct {
-	Type                 string                             `json:"type,omitempty"`
-	Password             string                             `json:"password,omitempty"`
-	Instances            *int                               `json:"instances,omitempty"`
-	Version              string                             `json:"version,omitempty"`
-	ScheduledBackups     *PSQLScheduledBackupsV2            `json:"scheduled_backups,omitempty"`
-	Recovery             *PSQLRecoveryV2                    `json:"recovery,omitempty"`
-	PrivateNetworkConfig *PSQLPrivateNetworkConfigRequestV2 `json:"private_networking,omitempty"`
-	PublicNetworkConfig  *PSQLPublicNetworkConfigRequestV2  `json:"public_networking,omitempty"`
+	Type              string                          `json:"type,omitempty"`
+	Password          string                          `json:"password,omitempty"`
+	Instances         *int                            `json:"instances,omitempty"`
+	Version           string                          `json:"version,omitempty"`
+	ScheduledBackups  *PSQLScheduledBackupsV2         `json:"scheduled_backups,omitempty"`
+	Recovery          *PSQLRecoveryV2                 `json:"recovery,omitempty"`
+	PrivateNetworking *PSQLPrivateNetworkingRequestV2 `json:"private_networking,omitempty"`
+	PublicNetworking  *PSQLPublicNetworkingRequestV2  `json:"public_networking,omitempty"`
 }
 
 type PSQLApplicationConfigUpdateRequestV2 struct {
-	Password             string                             `json:"password,omitempty"`
-	Instances            *int                               `json:"instances,omitempty"`
-	Version              string                             `json:"version,omitempty"`
-	ScheduledBackups     *PSQLScheduledBackupsV2            `json:"scheduled_backups,omitempty"`
-	PrivateNetworkConfig *PSQLPrivateNetworkConfigRequestV2 `json:"private_networking,omitempty"`
-	PublicNetworkConfig  *PSQLPublicNetworkConfigRequestV2  `json:"public_networking,omitempty"`
+	Password          string                          `json:"password,omitempty"`
+	Instances         *int                            `json:"instances,omitempty"`
+	Version           string                          `json:"version,omitempty"`
+	ScheduledBackups  *PSQLScheduledBackupsV2         `json:"scheduled_backups,omitempty"`
+	PrivateNetworking *PSQLPrivateNetworkingRequestV2 `json:"private_networking,omitempty"`
+	PublicNetworking  *PSQLPublicNetworkingRequestV2  `json:"public_networking,omitempty"`
 }
 
 type PSQLApplicationConfigResponseV2 struct {
-	Type                 string                              `json:"type,omitempty"`
-	Password             string                              `json:"password,omitempty"`
-	Instances            *int                                `json:"instances,omitempty"`
-	Version              string                              `json:"version,omitempty"`
-	ScheduledBackups     *PSQLScheduledBackupsV2             `json:"scheduled_backups,omitempty"`
-	Recovery             *PSQLRecoveryV2                     `json:"recovery,omitempty"`
-	PrivateNetworkConfig *PSQLPrivateNetworkConfigResponseV2 `json:"private_networking,omitempty"`
-	PublicNetworkConfig  *PSQLPublicNetworkConfigResponseV2  `json:"public_networking,omitempty"`
+	Type              string                           `json:"type,omitempty"`
+	Password          string                           `json:"password,omitempty"`
+	Instances         *int                             `json:"instances,omitempty"`
+	Version           string                           `json:"version,omitempty"`
+	ScheduledBackups  *PSQLScheduledBackupsV2          `json:"scheduled_backups,omitempty"`
+	Recovery          *PSQLRecoveryV2                  `json:"recovery,omitempty"`
+	PrivateNetworking *PSQLPrivateNetworkingResponseV2 `json:"private_networking,omitempty"`
+	PublicNetworking  *PSQLPublicNetworkingResponseV2  `json:"public_networking,omitempty"`
 }
 
 type PSQLScheduledBackupsV2 struct {
@@ -331,13 +331,13 @@ type PSQLRecoveryV2 struct {
 	TargetTime *time.Time `json:"targetTime,omitempty"`
 }
 
-type PSQLPrivateNetworkConfigRequestV2 struct {
+type PSQLPrivateNetworkingRequestV2 struct {
 	Enabled          bool      `json:"enabled"`
 	AllowedCIDRs     *[]string `json:"allowed_cidrs,omitempty"`
 	SharedSubnetCIDR *string   `json:"shared_subnet_cidr,omitempty"`
 }
 
-type PSQLPrivateNetworkConfigResponseV2 struct {
+type PSQLPrivateNetworkingResponseV2 struct {
 	Enabled          bool      `json:"enabled"`
 	AllowedCIDRs     *[]string `json:"allowed_cidrs,omitempty"`
 	SharedSubnetCIDR *string   `json:"shared_subnet_cidr,omitempty"`
@@ -347,12 +347,12 @@ type PSQLPrivateNetworkConfigResponseV2 struct {
 	SharedNetworkID  string    `json:"shared_network_id,omitempty"`
 }
 
-type PSQLPublicNetworkConfigRequestV2 struct {
+type PSQLPublicNetworkingRequestV2 struct {
 	Enabled      bool      `json:"enabled"`
 	AllowedCIDRs *[]string `json:"allowed_cidrs,omitempty"`
 }
 
-type PSQLPublicNetworkConfigResponseV2 struct {
+type PSQLPublicNetworkingResponseV2 struct {
 	Enabled      bool      `json:"enabled"`
 	AllowedCIDRs *[]string `json:"allowed_cidrs,omitempty"`
 	Hostname     string    `json:"hostname,omitempty"`
