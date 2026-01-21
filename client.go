@@ -1,132 +1,90 @@
 package sys11dbaassdk
 
 import (
-	"bytes"
-	"encoding/json"
-	"errors"
-	"fmt"
-	"io"
+	"context"
 	"net/http"
-	"os"
-	"time"
+
+	databasev1 "github.com/syseleven/sys11dbaas-sdk/database/v1"
+	databasev2 "github.com/syseleven/sys11dbaas-sdk/database/v2"
 )
-
-type AuthMode string
-
-const (
-	AuthModeApiKey AuthMode = "apikey"
-	AuthModeSSO    AuthMode = "sso"
-)
-
-type errorMsg struct {
-	Status  string `json:"status"`
-	Code    int    `json:"code"`
-	Message string `json:"msg"`
-}
 
 type Client struct {
-	baseUrl  string
-	apiKey   string
-	user     string
-	client   *http.Client
-	agent    string
-	authMode AuthMode
+	server         string
+	requestEditors []func(context.Context, *http.Request) error
+
+	v1Client *databasev1.TypedClient
+	v2Client *databasev2.TypedClient
 }
 
-func NewClient(baseurl, apikey, agent string, timeoutSeconds int, authMode AuthMode) (*Client, error) {
-	client := &Client{
-		baseUrl:  baseurl,
-		apiKey:   apikey,
-		user:     apikey,
-		agent:    agent,
-		authMode: authMode,
+func NewClient(server string, options ...ClientOption) (*Client, error) {
+	c := &Client{
+		server: server,
 	}
 
-	client.client = &http.Client{
-		Timeout: time.Duration(timeoutSeconds) * time.Second,
+	for _, option := range options {
+		option(c)
 	}
 
-	if _, ok := os.LookupEnv("SYS11DBAAS_SDK_DEBUG"); ok {
-		client.WithRequestLogging()
+	v1options := make([]databasev1.ClientOption, 0)
+	for _, requestEditor := range c.requestEditors {
+		v1options = append(v1options, databasev1.WithRequestEditorFn(requestEditor))
 	}
 
-	return client, nil
-}
-
-func (c *Client) WithRequestLogging() {
-	c.client.Transport = &requestLoggingTransport{}
-}
-
-func (c *Client) get(path string, verbose bool) ([]byte, error) {
-	req, err := http.NewRequest(http.MethodGet, c.baseUrl+path, nil)
+	var err error
+	c.v1Client, err = databasev1.NewTypedClient(c.server, v1options...)
 	if err != nil {
 		return nil, err
 	}
-	return c.doReq(req, verbose)
+
+	v2options := make([]databasev2.ClientOption, 0)
+	for _, requestEditor := range c.requestEditors {
+		v2options = append(v2options, databasev2.WithRequestEditorFn(requestEditor))
+	}
+
+	c.v2Client, err = databasev2.NewTypedClient(c.server, v2options...)
+	if err != nil {
+		return nil, err
+	}
+
+	return c, nil
 }
 
-func (c *Client) delete(path string, verbose bool) ([]byte, error) {
-	req, err := http.NewRequest(http.MethodDelete, c.baseUrl+path, nil)
-	if err != nil {
-		return nil, err
-	}
-	return c.doReq(req, verbose)
+func (c *Client) V1() *databasev1.TypedClient {
+	return c.v1Client
 }
 
-func (c *Client) post(path string, data []byte, verbose bool) ([]byte, error) {
-	req, err := http.NewRequest(http.MethodPost, c.baseUrl+path, bytes.NewReader(data))
-	req.Header.Set("Content-Type", "application/json")
-	if err != nil {
-		return nil, err
-	}
-	return c.doReq(req, verbose)
+func (c *Client) V2() *databasev2.TypedClient {
+	return c.v2Client
 }
 
-func (c *Client) patch(path string, data []byte, verbose bool) ([]byte, error) {
-	req, err := http.NewRequest(http.MethodPatch, c.baseUrl+path, bytes.NewReader(data))
-	req.Header.Set("Content-Type", "application/json")
-	if err != nil {
-		return nil, err
+type ClientOption func(*Client) error
+
+func WithApiKey(apiKey string) ClientOption {
+	return func(c *Client) error {
+		c.requestEditors = append(c.requestEditors, func(ctx context.Context, req *http.Request) error {
+			req.Header.Add("x-s11-api-key", apiKey)
+			return nil
+		})
+		return nil
 	}
-	return c.doReq(req, verbose)
 }
 
-func (c *Client) doReq(req *http.Request, verbose bool) ([]byte, error) {
-	req.Header.Add("Accept", "application/json")
-	if c.authMode == AuthModeApiKey {
-		req.Header.Add("x-s11-api-key", c.apiKey)
-	} else if c.authMode == AuthModeSSO {
-		req.Header.Add("Authorization", "Bearer "+c.apiKey)
+func WithServiceAccount(token string) ClientOption {
+	return func(c *Client) error {
+		c.requestEditors = append(c.requestEditors, func(ctx context.Context, req *http.Request) error {
+			req.Header.Add("Authorization", "Bearer "+token)
+			return nil
+		})
+		return nil
 	}
-	req.Header.Add("User-Agent", c.agent)
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	respBody, err := io.ReadAll(resp.Body)
-	if verbose {
-		fmt.Printf("status: %s\nraw response:\n%s\n", resp.Status, respBody)
-	}
-	if err != nil {
-		return nil, err
-	}
-	if resp.StatusCode > 299 {
-		if resp.StatusCode == http.StatusUnauthorized {
-			return nil, errors.New("authentication failed")
-		}
+}
 
-		var errMsg string
-		if resp.Header.Get("Content-Type") == "application/json" {
-			e := &errorMsg{}
-			err := json.Unmarshal(respBody, e)
-			if err != nil {
-				return nil, err
-			}
-			errMsg = e.Message
-		} else {
-			errMsg = string(respBody)
-		}
-		return respBody, errors.New(errMsg)
+func WithUserAgent(userAgent string) ClientOption {
+	return func(c *Client) error {
+		c.requestEditors = append(c.requestEditors, func(ctx context.Context, req *http.Request) error {
+			req.Header.Add("User-Agent", userAgent)
+			return nil
+		})
+		return nil
 	}
-	return respBody, nil
 }
