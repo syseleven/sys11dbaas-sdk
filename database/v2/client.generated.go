@@ -37,6 +37,18 @@ type APIError struct {
 	Status string `json:"status"`
 }
 
+// ErrorDetail defines model for ErrorDetail.
+type ErrorDetail struct {
+	// Location Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id'
+	Location *string `json:"location,omitempty"`
+
+	// Message Error message text
+	Message *string `json:"message,omitempty"`
+
+	// Value The value at the given location
+	Value interface{} `json:"value,omitempty"`
+}
+
 // Flavor defines model for Flavor.
 type Flavor struct {
 	Default     bool   `json:"default"`
@@ -1037,6 +1049,25 @@ type ListPostgreSQLsResponse struct {
 		// Status HTTP status
 		Status string `json:"status"`
 	}
+	ApplicationproblemJSON500 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
+	}
 	JSON501 *struct {
 		// Code HTTP status code
 		Code int64 `json:"code"`
@@ -1119,6 +1150,25 @@ type CreatePostgreSQLResponse struct {
 		// Status HTTP status
 		Status string `json:"status"`
 	}
+	ApplicationproblemJSON422 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
+	}
 	JSON500 *struct {
 		// Code HTTP status code
 		Code int64 `json:"code"`
@@ -1128,6 +1178,25 @@ type CreatePostgreSQLResponse struct {
 
 		// Status HTTP status
 		Status string `json:"status"`
+	}
+	ApplicationproblemJSON500 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
 	}
 	JSON501 *struct {
 		// Code HTTP status code
@@ -1241,6 +1310,25 @@ type DeletePostgreSQLResponse struct {
 		// Status HTTP status
 		Status string `json:"status"`
 	}
+	ApplicationproblemJSON500 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
+	}
 	JSON501 *struct {
 		// Code HTTP status code
 		Code int64 `json:"code"`
@@ -1332,6 +1420,25 @@ type GetPostgreSQLResponse struct {
 
 		// Status HTTP status
 		Status string `json:"status"`
+	}
+	ApplicationproblemJSON500 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
 	}
 	JSON501 *struct {
 		// Code HTTP status code
@@ -1425,6 +1532,25 @@ type PatchPostgreSQLResponse struct {
 		// Status HTTP status
 		Status string `json:"status"`
 	}
+	ApplicationproblemJSON422 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
+	}
 	JSON500 *struct {
 		// Code HTTP status code
 		Code int64 `json:"code"`
@@ -1434,6 +1560,25 @@ type PatchPostgreSQLResponse struct {
 
 		// Status HTTP status
 		Status string `json:"status"`
+	}
+	ApplicationproblemJSON500 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
 	}
 	JSON501 *struct {
 		// Code HTTP status code
@@ -1547,6 +1692,25 @@ type UpdatePostgreSQLResponse struct {
 		// Status HTTP status
 		Status string `json:"status"`
 	}
+	ApplicationproblemJSON422 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
+	}
 	JSON500 *struct {
 		// Code HTTP status code
 		Code int64 `json:"code"`
@@ -1556,6 +1720,25 @@ type UpdatePostgreSQLResponse struct {
 
 		// Status HTTP status
 		Status string `json:"status"`
+	}
+	ApplicationproblemJSON500 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
 	}
 	JSON501 *struct {
 		// Code HTTP status code
@@ -1659,6 +1842,25 @@ type ListPostgreSQLFlavorsResponse struct {
 		// Status HTTP status
 		Status string `json:"status"`
 	}
+	ApplicationproblemJSON500 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
+	}
 	JSON503 *struct {
 		// Code HTTP status code
 		Code int64 `json:"code"`
@@ -1731,6 +1933,25 @@ type ListPostgreSQLRegionsResponse struct {
 		// Status HTTP status
 		Status string `json:"status"`
 	}
+	ApplicationproblemJSON500 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
+	}
 	JSON503 *struct {
 		// Code HTTP status code
 		Code int64 `json:"code"`
@@ -1802,6 +2023,25 @@ type ListPostgreSQLVersionsResponse struct {
 
 		// Status HTTP status
 		Status string `json:"status"`
+	}
+	ApplicationproblemJSON500 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
 	}
 	JSON503 *struct {
 		// Code HTTP status code
@@ -1950,6 +2190,47 @@ func ParseListPostgreSQLsResponse(rsp *http.Response) (*ListPostgreSQLsResponse,
 	}
 
 	switch {
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON500 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest []PostgreSQLGetResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -2005,22 +2286,6 @@ func ParseListPostgreSQLsResponse(rsp *http.Response) (*ListPostgreSQLsResponse,
 		}
 		response.JSON403 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest struct {
-			// Code HTTP status code
-			Code int64 `json:"code"`
-
-			// Msg Error message
-			Msg string `json:"msg"`
-
-			// Status HTTP status
-			Status string `json:"status"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 501:
 		var dest struct {
 			// Code HTTP status code
@@ -2072,6 +2337,88 @@ func ParseCreatePostgreSQLResponse(rsp *http.Response) (*CreatePostgreSQLRespons
 	}
 
 	switch {
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 422:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON422 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 422:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON422 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON500 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 202:
 		var dest PostgreSQLGetResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -2126,38 +2473,6 @@ func ParseCreatePostgreSQLResponse(rsp *http.Response) (*CreatePostgreSQLRespons
 			return nil, err
 		}
 		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 422:
-		var dest struct {
-			// Code HTTP status code
-			Code int64 `json:"code"`
-
-			// Msg Error message
-			Msg string `json:"msg"`
-
-			// Status HTTP status
-			Status string `json:"status"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON422 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest struct {
-			// Code HTTP status code
-			Code int64 `json:"code"`
-
-			// Msg Error message
-			Msg string `json:"msg"`
-
-			// Status HTTP status
-			Status string `json:"status"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 501:
 		var dest struct {
@@ -2242,6 +2557,47 @@ func ParseDeletePostgreSQLResponse(rsp *http.Response) (*DeletePostgreSQLRespons
 	}
 
 	switch {
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON500 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 202:
 		var dest APIError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -2313,22 +2669,6 @@ func ParseDeletePostgreSQLResponse(rsp *http.Response) (*DeletePostgreSQLRespons
 		}
 		response.JSON404 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest struct {
-			// Code HTTP status code
-			Code int64 `json:"code"`
-
-			// Msg Error message
-			Msg string `json:"msg"`
-
-			// Status HTTP status
-			Status string `json:"status"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 501:
 		var dest struct {
 			// Code HTTP status code
@@ -2380,6 +2720,47 @@ func ParseGetPostgreSQLResponse(rsp *http.Response) (*GetPostgreSQLResponse, err
 	}
 
 	switch {
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON500 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest PostgreSQLGetResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -2450,22 +2831,6 @@ func ParseGetPostgreSQLResponse(rsp *http.Response) (*GetPostgreSQLResponse, err
 			return nil, err
 		}
 		response.JSON404 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest struct {
-			// Code HTTP status code
-			Code int64 `json:"code"`
-
-			// Msg Error message
-			Msg string `json:"msg"`
-
-			// Status HTTP status
-			Status string `json:"status"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 501:
 		var dest struct {
@@ -2518,6 +2883,88 @@ func ParsePatchPostgreSQLResponse(rsp *http.Response) (*PatchPostgreSQLResponse,
 	}
 
 	switch {
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 422:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON422 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 422:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON422 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON500 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest PostgreSQLGetResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -2588,38 +3035,6 @@ func ParsePatchPostgreSQLResponse(rsp *http.Response) (*PatchPostgreSQLResponse,
 			return nil, err
 		}
 		response.JSON404 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 422:
-		var dest struct {
-			// Code HTTP status code
-			Code int64 `json:"code"`
-
-			// Msg Error message
-			Msg string `json:"msg"`
-
-			// Status HTTP status
-			Status string `json:"status"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON422 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest struct {
-			// Code HTTP status code
-			Code int64 `json:"code"`
-
-			// Msg Error message
-			Msg string `json:"msg"`
-
-			// Status HTTP status
-			Status string `json:"status"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 501:
 		var dest struct {
@@ -2704,6 +3119,88 @@ func ParseUpdatePostgreSQLResponse(rsp *http.Response) (*UpdatePostgreSQLRespons
 	}
 
 	switch {
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 422:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON422 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 422:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON422 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON500 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest PostgreSQLGetResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -2774,38 +3271,6 @@ func ParseUpdatePostgreSQLResponse(rsp *http.Response) (*UpdatePostgreSQLRespons
 			return nil, err
 		}
 		response.JSON404 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 422:
-		var dest struct {
-			// Code HTTP status code
-			Code int64 `json:"code"`
-
-			// Msg Error message
-			Msg string `json:"msg"`
-
-			// Status HTTP status
-			Status string `json:"status"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON422 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest struct {
-			// Code HTTP status code
-			Code int64 `json:"code"`
-
-			// Msg Error message
-			Msg string `json:"msg"`
-
-			// Status HTTP status
-			Status string `json:"status"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 501:
 		var dest struct {
@@ -2890,6 +3355,47 @@ func ParseListPostgreSQLFlavorsResponse(rsp *http.Response) (*ListPostgreSQLFlav
 	}
 
 	switch {
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON500 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest []Flavor
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -2945,22 +3451,6 @@ func ParseListPostgreSQLFlavorsResponse(rsp *http.Response) (*ListPostgreSQLFlav
 		}
 		response.JSON403 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest struct {
-			// Code HTTP status code
-			Code int64 `json:"code"`
-
-			// Msg Error message
-			Msg string `json:"msg"`
-
-			// Status HTTP status
-			Status string `json:"status"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
 		var dest struct {
 			// Code HTTP status code
@@ -2996,6 +3486,47 @@ func ParseListPostgreSQLRegionsResponse(rsp *http.Response) (*ListPostgreSQLRegi
 	}
 
 	switch {
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON500 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest []Region
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -3051,22 +3582,6 @@ func ParseListPostgreSQLRegionsResponse(rsp *http.Response) (*ListPostgreSQLRegi
 		}
 		response.JSON403 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest struct {
-			// Code HTTP status code
-			Code int64 `json:"code"`
-
-			// Msg Error message
-			Msg string `json:"msg"`
-
-			// Status HTTP status
-			Status string `json:"status"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
 		var dest struct {
 			// Code HTTP status code
@@ -3102,6 +3617,47 @@ func ParseListPostgreSQLVersionsResponse(rsp *http.Response) (*ListPostgreSQLVer
 	}
 
 	switch {
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON500 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest []Version
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -3156,22 +3712,6 @@ func ParseListPostgreSQLVersionsResponse(rsp *http.Response) (*ListPostgreSQLVer
 			return nil, err
 		}
 		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest struct {
-			// Code HTTP status code
-			Code int64 `json:"code"`
-
-			// Msg Error message
-			Msg string `json:"msg"`
-
-			// Status HTTP status
-			Status string `json:"status"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
 		var dest struct {
