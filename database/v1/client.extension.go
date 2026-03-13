@@ -46,6 +46,18 @@ func (c *TypedClient) CreatePostgreSQL(ctx context.Context, orgId string, projec
 	return *resp.JSON202, nil
 }
 
+func (c *TypedClient) UpdatePostgreSQL(ctx context.Context, orgId string, projectId string, dbUuid string, postgreSQLUpdateRequestV1 PostgreSQLUpdateRequestV1) (PostgreSQLGetResponseV1, error) {
+	resp, err := c.cwr.UpdatePostgreSQLWithResponse(ctx, orgId, projectId, dbUuid, postgreSQLUpdateRequestV1)
+	if err != nil {
+		return PostgreSQLGetResponseV1{}, fmt.Errorf("failed to invoke request: %w", err)
+	}
+	if resp.StatusCode() != http.StatusOK {
+		err := fmt.Errorf("got invalid response: %s: %s", resp.Status(), string(resp.Body))
+		return PostgreSQLGetResponseV1{}, err
+	}
+	return *resp.JSON200, nil
+}
+
 func (c *TypedClient) DeletePostgreSQL(ctx context.Context, orgId string, projectId string, dbUuid string) (APIError, error) {
 	resp, err := c.cwr.DeletePostgreSQLWithResponse(ctx, orgId, projectId, dbUuid)
 	if err != nil {
@@ -72,18 +84,6 @@ func (c *TypedClient) GetPostgreSQL(ctx context.Context, orgId string, projectId
 
 func (c *TypedClient) PatchPostgreSQL(ctx context.Context, orgId string, projectId string, dbUuid string, postgreSQLPatchRequest PostgreSQLPatchRequest) (PostgreSQLGetResponseV1, error) {
 	resp, err := c.cwr.PatchPostgreSQLWithResponse(ctx, orgId, projectId, dbUuid, postgreSQLPatchRequest)
-	if err != nil {
-		return PostgreSQLGetResponseV1{}, fmt.Errorf("failed to invoke request: %w", err)
-	}
-	if resp.StatusCode() != http.StatusOK {
-		err := fmt.Errorf("got invalid response: %s: %s", resp.Status(), string(resp.Body))
-		return PostgreSQLGetResponseV1{}, err
-	}
-	return *resp.JSON200, nil
-}
-
-func (c *TypedClient) UpdatePostgreSQL(ctx context.Context, orgId string, projectId string, dbUuid string, postgreSQLUpdateRequestV1 PostgreSQLUpdateRequestV1) (PostgreSQLGetResponseV1, error) {
-	resp, err := c.cwr.UpdatePostgreSQLWithResponse(ctx, orgId, projectId, dbUuid, postgreSQLUpdateRequestV1)
 	if err != nil {
 		return PostgreSQLGetResponseV1{}, fmt.Errorf("failed to invoke request: %w", err)
 	}
