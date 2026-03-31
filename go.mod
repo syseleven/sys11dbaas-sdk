@@ -2,7 +2,7 @@ module github.com/syseleven/sys11dbaas-sdk
 
 go 1.22.6
 
-require github.com/oapi-codegen/runtime v1.2.0
+require github.com/oapi-codegen/runtime v1.3.1
 
 require (
 	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
