@@ -8,40 +8,37 @@ import (
 	databasev2 "github.com/syseleven/sys11dbaas-sdk/database/v2"
 )
 
-type Client struct {
-	server         string
-	requestEditors []func(context.Context, *http.Request) error
+type HttpRequestDoer interface {
+	Do(req *http.Request) (*http.Response, error)
+}
 
-	v1Client *databasev1.TypedClient
-	v2Client *databasev2.TypedClient
+type Client struct {
+	server string
+
+	v1Client  *databasev1.TypedClient
+	v1Options []databasev1.ClientOption
+	v2Client  *databasev2.TypedClient
+	v2Options []databasev2.ClientOption
 }
 
 func NewClient(server string, options ...ClientOption) (*Client, error) {
 	c := &Client{
-		server: server,
+		server:    server,
+		v1Options: make([]databasev1.ClientOption, 0),
+		v2Options: make([]databasev2.ClientOption, 0),
 	}
 
 	for _, option := range options {
 		option(c)
 	}
 
-	v1options := make([]databasev1.ClientOption, 0)
-	for _, requestEditor := range c.requestEditors {
-		v1options = append(v1options, databasev1.WithRequestEditorFn(requestEditor))
-	}
-
 	var err error
-	c.v1Client, err = databasev1.NewTypedClient(c.server, v1options...)
+	c.v1Client, err = databasev1.NewTypedClient(c.server, c.v1Options...)
 	if err != nil {
 		return nil, err
 	}
 
-	v2options := make([]databasev2.ClientOption, 0)
-	for _, requestEditor := range c.requestEditors {
-		v2options = append(v2options, databasev2.WithRequestEditorFn(requestEditor))
-	}
-
-	c.v2Client, err = databasev2.NewTypedClient(c.server, v2options...)
+	c.v2Client, err = databasev2.NewTypedClient(c.server, c.v2Options...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,30 +58,44 @@ type ClientOption func(*Client) error
 
 func WithApiKey(apiKey string) ClientOption {
 	return func(c *Client) error {
-		c.requestEditors = append(c.requestEditors, func(ctx context.Context, req *http.Request) error {
+		fn := func(ctx context.Context, req *http.Request) error {
 			req.Header.Add("x-s11-api-key", apiKey)
 			return nil
-		})
+		}
+		c.v1Options = append(c.v1Options, databasev1.WithRequestEditorFn(fn))
+		c.v2Options = append(c.v2Options, databasev2.WithRequestEditorFn(fn))
 		return nil
 	}
 }
 
 func WithServiceAccount(token string) ClientOption {
 	return func(c *Client) error {
-		c.requestEditors = append(c.requestEditors, func(ctx context.Context, req *http.Request) error {
+		fn := func(ctx context.Context, req *http.Request) error {
 			req.Header.Add("Authorization", "Bearer "+token)
 			return nil
-		})
+		}
+		c.v1Options = append(c.v1Options, databasev1.WithRequestEditorFn(fn))
+		c.v2Options = append(c.v2Options, databasev2.WithRequestEditorFn(fn))
 		return nil
 	}
 }
 
 func WithUserAgent(userAgent string) ClientOption {
 	return func(c *Client) error {
-		c.requestEditors = append(c.requestEditors, func(ctx context.Context, req *http.Request) error {
+		fn := func(ctx context.Context, req *http.Request) error {
 			req.Header.Add("User-Agent", userAgent)
 			return nil
-		})
+		}
+		c.v1Options = append(c.v1Options, databasev1.WithRequestEditorFn(fn))
+		c.v2Options = append(c.v2Options, databasev2.WithRequestEditorFn(fn))
+		return nil
+	}
+}
+
+func WithHTTPClient(doer HttpRequestDoer) ClientOption {
+	return func(c *Client) error {
+		c.v1Options = append(c.v1Options, databasev1.WithHTTPClient(doer))
+		c.v2Options = append(c.v2Options, databasev2.WithHTTPClient(doer))
 		return nil
 	}
 }
