@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"slices"
 	"sort"
 	"strings"
 	"text/template"
@@ -92,7 +91,6 @@ func execute() error {
 	}
 
 	packageName := os.Args[3]
-	tag := os.Args[4]
 
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
@@ -153,9 +151,6 @@ func execute() error {
 		}
 
 		for method, op := range pathItem.Operations() {
-			if !slices.Contains(op.Tags, tag) {
-				continue
-			}
 			arguments := []Argument{}
 			for _, parameter := range op.Parameters {
 				arguments = append(arguments, Argument{
