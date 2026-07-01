@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"slices"
 	"sort"
 	"strings"
 	"text/template"
@@ -216,6 +217,10 @@ func execute() error {
 			})
 		}
 	}
+
+	slices.SortFunc(data.Functions, func(a, b Function) int {
+		return strings.Compare(a.Name, b.Name)
+	})
 
 	tmpl := template.Must(template.New("src").Parse(templateSource))
 	var buffer bytes.Buffer

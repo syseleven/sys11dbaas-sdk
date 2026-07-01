@@ -22,18 +22,6 @@ func NewTypedClient(server string, opts ...ClientOption) (*TypedClient, error) {
 	return &TypedClient{cwr: *clientWithResponses}, nil
 }
 
-func (c *TypedClient) ListFeatures(ctx context.Context) (map[string]string, error) {
-	resp, err := c.cwr.ListFeaturesWithResponse(ctx)
-	if err != nil {
-		return map[string]string{}, fmt.Errorf("failed to invoke request: %w", err)
-	}
-	if resp.StatusCode() != http.StatusOK {
-		err := fmt.Errorf("got invalid response: %s: %s", resp.Status(), string(resp.Body))
-		return map[string]string{}, err
-	}
-	return *resp.JSON200, nil
-}
-
 func (c *TypedClient) CreatePostgreSQL(ctx context.Context, orgId string, projectId string, postgreSQLCreateRequest PostgreSQLCreateRequest) (PostgreSQLGetResponse, error) {
 	resp, err := c.cwr.CreatePostgreSQLWithResponse(ctx, orgId, projectId, postgreSQLCreateRequest)
 	if err != nil {
@@ -44,18 +32,6 @@ func (c *TypedClient) CreatePostgreSQL(ctx context.Context, orgId string, projec
 		return PostgreSQLGetResponse{}, err
 	}
 	return *resp.JSON202, nil
-}
-
-func (c *TypedClient) ListPostgreSQLs(ctx context.Context, orgId string, projectId string) ([]PostgreSQLGetResponse, error) {
-	resp, err := c.cwr.ListPostgreSQLsWithResponse(ctx, orgId, projectId)
-	if err != nil {
-		return nil, fmt.Errorf("failed to invoke request: %w", err)
-	}
-	if resp.StatusCode() != http.StatusOK {
-		err := fmt.Errorf("got invalid response: %s: %s", resp.Status(), string(resp.Body))
-		return nil, err
-	}
-	return *resp.JSON200, nil
 }
 
 func (c *TypedClient) DeletePostgreSQL(ctx context.Context, orgId string, projectId string, dbUuid string) (APIError, error) {
@@ -82,26 +58,14 @@ func (c *TypedClient) GetPostgreSQL(ctx context.Context, orgId string, projectId
 	return *resp.JSON200, nil
 }
 
-func (c *TypedClient) PatchPostgreSQL(ctx context.Context, orgId string, projectId string, dbUuid string, postgreSQLPatchRequest PostgreSQLPatchRequest) (PostgreSQLGetResponse, error) {
-	resp, err := c.cwr.PatchPostgreSQLWithResponse(ctx, orgId, projectId, dbUuid, postgreSQLPatchRequest)
+func (c *TypedClient) ListFeatures(ctx context.Context) (map[string]string, error) {
+	resp, err := c.cwr.ListFeaturesWithResponse(ctx)
 	if err != nil {
-		return PostgreSQLGetResponse{}, fmt.Errorf("failed to invoke request: %w", err)
+		return map[string]string{}, fmt.Errorf("failed to invoke request: %w", err)
 	}
 	if resp.StatusCode() != http.StatusOK {
 		err := fmt.Errorf("got invalid response: %s: %s", resp.Status(), string(resp.Body))
-		return PostgreSQLGetResponse{}, err
-	}
-	return *resp.JSON200, nil
-}
-
-func (c *TypedClient) UpdatePostgreSQL(ctx context.Context, orgId string, projectId string, dbUuid string, postgreSQLCreateRequest PostgreSQLCreateRequest) (PostgreSQLGetResponse, error) {
-	resp, err := c.cwr.UpdatePostgreSQLWithResponse(ctx, orgId, projectId, dbUuid, postgreSQLCreateRequest)
-	if err != nil {
-		return PostgreSQLGetResponse{}, fmt.Errorf("failed to invoke request: %w", err)
-	}
-	if resp.StatusCode() != http.StatusOK {
-		err := fmt.Errorf("got invalid response: %s: %s", resp.Status(), string(resp.Body))
-		return PostgreSQLGetResponse{}, err
+		return map[string]string{}, err
 	}
 	return *resp.JSON200, nil
 }
@@ -138,6 +102,42 @@ func (c *TypedClient) ListPostgreSQLVersions(ctx context.Context, orgId string, 
 	if resp.StatusCode() != http.StatusOK {
 		err := fmt.Errorf("got invalid response: %s: %s", resp.Status(), string(resp.Body))
 		return nil, err
+	}
+	return *resp.JSON200, nil
+}
+
+func (c *TypedClient) ListPostgreSQLs(ctx context.Context, orgId string, projectId string) ([]PostgreSQLGetResponse, error) {
+	resp, err := c.cwr.ListPostgreSQLsWithResponse(ctx, orgId, projectId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to invoke request: %w", err)
+	}
+	if resp.StatusCode() != http.StatusOK {
+		err := fmt.Errorf("got invalid response: %s: %s", resp.Status(), string(resp.Body))
+		return nil, err
+	}
+	return *resp.JSON200, nil
+}
+
+func (c *TypedClient) PatchPostgreSQL(ctx context.Context, orgId string, projectId string, dbUuid string, postgreSQLPatchRequest PostgreSQLPatchRequest) (PostgreSQLGetResponse, error) {
+	resp, err := c.cwr.PatchPostgreSQLWithResponse(ctx, orgId, projectId, dbUuid, postgreSQLPatchRequest)
+	if err != nil {
+		return PostgreSQLGetResponse{}, fmt.Errorf("failed to invoke request: %w", err)
+	}
+	if resp.StatusCode() != http.StatusOK {
+		err := fmt.Errorf("got invalid response: %s: %s", resp.Status(), string(resp.Body))
+		return PostgreSQLGetResponse{}, err
+	}
+	return *resp.JSON200, nil
+}
+
+func (c *TypedClient) UpdatePostgreSQL(ctx context.Context, orgId string, projectId string, dbUuid string, postgreSQLCreateRequest PostgreSQLCreateRequest) (PostgreSQLGetResponse, error) {
+	resp, err := c.cwr.UpdatePostgreSQLWithResponse(ctx, orgId, projectId, dbUuid, postgreSQLCreateRequest)
+	if err != nil {
+		return PostgreSQLGetResponse{}, fmt.Errorf("failed to invoke request: %w", err)
+	}
+	if resp.StatusCode() != http.StatusOK {
+		err := fmt.Errorf("got invalid response: %s: %s", resp.Status(), string(resp.Body))
+		return PostgreSQLGetResponse{}, err
 	}
 	return *resp.JSON200, nil
 }
