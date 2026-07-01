@@ -22,14 +22,14 @@ func NewTypedClient(server string, opts ...ClientOption) (*TypedClient, error) {
 	return &TypedClient{cwr: *clientWithResponses}, nil
 }
 
-func (c *TypedClient) ListPostgreSQLs(ctx context.Context, orgId string, projectId string) ([]PostgreSQLGetResponse, error) {
-	resp, err := c.cwr.ListPostgreSQLsWithResponse(ctx, orgId, projectId)
+func (c *TypedClient) ListFeatures(ctx context.Context) (map[string]string, error) {
+	resp, err := c.cwr.ListFeaturesWithResponse(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to invoke request: %w", err)
+		return map[string]string{}, fmt.Errorf("failed to invoke request: %w", err)
 	}
 	if resp.StatusCode() != http.StatusOK {
 		err := fmt.Errorf("got invalid response: %s: %s", resp.Status(), string(resp.Body))
-		return nil, err
+		return map[string]string{}, err
 	}
 	return *resp.JSON200, nil
 }
@@ -44,6 +44,18 @@ func (c *TypedClient) CreatePostgreSQL(ctx context.Context, orgId string, projec
 		return PostgreSQLGetResponse{}, err
 	}
 	return *resp.JSON202, nil
+}
+
+func (c *TypedClient) ListPostgreSQLs(ctx context.Context, orgId string, projectId string) ([]PostgreSQLGetResponse, error) {
+	resp, err := c.cwr.ListPostgreSQLsWithResponse(ctx, orgId, projectId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to invoke request: %w", err)
+	}
+	if resp.StatusCode() != http.StatusOK {
+		err := fmt.Errorf("got invalid response: %s: %s", resp.Status(), string(resp.Body))
+		return nil, err
+	}
+	return *resp.JSON200, nil
 }
 
 func (c *TypedClient) DeletePostgreSQL(ctx context.Context, orgId string, projectId string, dbUuid string) (APIError, error) {

@@ -198,6 +198,12 @@ func execute() error {
 				refElements := strings.Split(content.Schema.Value.Items.Ref, "/")
 				typ = refElements[len(refElements)-1]
 			}
+			if operationId == "ListFeatures" {
+				if content.Schema.Value.Type.Is("object") && content.Schema.Value.AdditionalProperties.Schema != nil && content.Schema.Value.AdditionalProperties.Schema != nil && content.Schema.Value.AdditionalProperties.Schema.Value.Type.Is("string") {
+					innerType := "string"
+					typ = fmt.Sprintf("map[string]%s", innerType)
+				}
+			}
 
 			data.Functions = append(data.Functions, Function{
 				Name:      operationId,

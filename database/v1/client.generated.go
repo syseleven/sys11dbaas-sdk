@@ -22,6 +22,24 @@ const (
 	StaticAuthScopes   staticAuthContextKey   = "StaticAuth.Scopes"
 )
 
+// Defines values for PostgreSQLPatchRequestApplicationConfigFeatures.
+const (
+	Off PostgreSQLPatchRequestApplicationConfigFeatures = "off"
+	On  PostgreSQLPatchRequestApplicationConfigFeatures = "on"
+)
+
+// Valid indicates whether the value is a known member of the PostgreSQLPatchRequestApplicationConfigFeatures enum.
+func (e PostgreSQLPatchRequestApplicationConfigFeatures) Valid() bool {
+	switch e {
+	case Off:
+		return true
+	case On:
+		return true
+	default:
+		return false
+	}
+}
+
 // APIError defines model for APIError.
 type APIError struct {
 	// Schema A URL to the JSON Schema for this object.
@@ -120,10 +138,11 @@ type PostgreSQLPatchRequest struct {
 	// Schema A URL to the JSON Schema for this object.
 	Schema            *string `json:"$schema,omitempty"`
 	ApplicationConfig *struct {
-		Hostname          *string `json:"hostname,omitempty"`
-		Instances         *int64  `json:"instances,omitempty"`
-		IpAddress         *string `json:"ip_address,omitempty"`
-		Password          *string `json:"password,omitempty"`
+		Features          *map[string]PostgreSQLPatchRequestApplicationConfigFeatures `json:"features,omitempty"`
+		Hostname          *string                                                     `json:"hostname,omitempty"`
+		Instances         *int64                                                      `json:"instances,omitempty"`
+		IpAddress         *string                                                     `json:"ip_address,omitempty"`
+		Password          *string                                                     `json:"password,omitempty"`
 		PrivateNetworking *struct {
 			AllowedCidrs     *[]string `json:"allowed_cidrs,omitempty"`
 			Enabled          *bool     `json:"enabled,omitempty"`
@@ -174,6 +193,9 @@ type PostgreSQLPatchRequest struct {
 		Type      *string   `json:"type,omitempty"`
 	} `json:"service_config,omitempty"`
 }
+
+// PostgreSQLPatchRequestApplicationConfigFeatures defines model for PostgreSQLPatchRequest.ApplicationConfig.Features.
+type PostgreSQLPatchRequestApplicationConfigFeatures string
 
 // PostgreSQLRecovery defines model for PostgreSQLRecovery.
 type PostgreSQLRecovery struct {

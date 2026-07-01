@@ -22,6 +22,42 @@ const (
 	StaticAuthScopes   staticAuthContextKey   = "StaticAuth.Scopes"
 )
 
+// Defines values for PostgreSQLApplicationConfigFeatures.
+const (
+	PostgreSQLApplicationConfigFeaturesOff PostgreSQLApplicationConfigFeatures = "off"
+	PostgreSQLApplicationConfigFeaturesOn  PostgreSQLApplicationConfigFeatures = "on"
+)
+
+// Valid indicates whether the value is a known member of the PostgreSQLApplicationConfigFeatures enum.
+func (e PostgreSQLApplicationConfigFeatures) Valid() bool {
+	switch e {
+	case PostgreSQLApplicationConfigFeaturesOff:
+		return true
+	case PostgreSQLApplicationConfigFeaturesOn:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PostgreSQLPatchRequestApplicationConfigFeatures.
+const (
+	PostgreSQLPatchRequestApplicationConfigFeaturesOff PostgreSQLPatchRequestApplicationConfigFeatures = "off"
+	PostgreSQLPatchRequestApplicationConfigFeaturesOn  PostgreSQLPatchRequestApplicationConfigFeatures = "on"
+)
+
+// Valid indicates whether the value is a known member of the PostgreSQLPatchRequestApplicationConfigFeatures enum.
+func (e PostgreSQLPatchRequestApplicationConfigFeatures) Valid() bool {
+	switch e {
+	case PostgreSQLPatchRequestApplicationConfigFeaturesOff:
+		return true
+	case PostgreSQLPatchRequestApplicationConfigFeaturesOn:
+		return true
+	default:
+		return false
+	}
+}
+
 // APIError defines model for APIError.
 type APIError struct {
 	// Schema A URL to the JSON Schema for this object.
@@ -58,17 +94,21 @@ type Flavor struct {
 
 // PostgreSQLApplicationConfig defines model for PostgreSQLApplicationConfig.
 type PostgreSQLApplicationConfig struct {
-	Hostname          *string                      `json:"hostname,omitempty"`
-	Instances         *int64                       `json:"instances"`
-	IpAddress         *string                      `json:"ip_address,omitempty"`
-	Password          string                       `json:"password"`
-	PrivateNetworking *PostgreSQLPrivateNetworking `json:"private_networking,omitempty"`
-	PublicNetworking  *PostgreSQLPublicNetworking  `json:"public_networking,omitempty"`
-	Recovery          *PostgreSQLRecovery          `json:"recovery,omitempty"`
-	ScheduledBackups  *PostgreSQLBackupSchedule    `json:"scheduled_backups,omitempty"`
-	Type              string                       `json:"type"`
-	Version           string                       `json:"version"`
+	Features          *map[string]PostgreSQLApplicationConfigFeatures `json:"features,omitempty"`
+	Hostname          *string                                         `json:"hostname,omitempty"`
+	Instances         *int64                                          `json:"instances"`
+	IpAddress         *string                                         `json:"ip_address,omitempty"`
+	Password          string                                          `json:"password"`
+	PrivateNetworking *PostgreSQLPrivateNetworking                    `json:"private_networking,omitempty"`
+	PublicNetworking  *PostgreSQLPublicNetworking                     `json:"public_networking,omitempty"`
+	Recovery          *PostgreSQLRecovery                             `json:"recovery,omitempty"`
+	ScheduledBackups  *PostgreSQLBackupSchedule                       `json:"scheduled_backups,omitempty"`
+	Type              string                                          `json:"type"`
+	Version           string                                          `json:"version"`
 }
+
+// PostgreSQLApplicationConfigFeatures defines model for PostgreSQLApplicationConfig.Features.
+type PostgreSQLApplicationConfigFeatures string
 
 // PostgreSQLBackupSchedule defines model for PostgreSQLBackupSchedule.
 type PostgreSQLBackupSchedule struct {
@@ -122,10 +162,11 @@ type PostgreSQLPatchRequest struct {
 	// Schema A URL to the JSON Schema for this object.
 	Schema            *string `json:"$schema,omitempty"`
 	ApplicationConfig *struct {
-		Hostname          *string `json:"hostname,omitempty"`
-		Instances         *int64  `json:"instances,omitempty"`
-		IpAddress         *string `json:"ip_address,omitempty"`
-		Password          *string `json:"password,omitempty"`
+		Features          *map[string]PostgreSQLPatchRequestApplicationConfigFeatures `json:"features,omitempty"`
+		Hostname          *string                                                     `json:"hostname,omitempty"`
+		Instances         *int64                                                      `json:"instances,omitempty"`
+		IpAddress         *string                                                     `json:"ip_address,omitempty"`
+		Password          *string                                                     `json:"password,omitempty"`
 		PrivateNetworking *struct {
 			AllowedCidrs     *[]string `json:"allowed_cidrs,omitempty"`
 			Enabled          *bool     `json:"enabled,omitempty"`
@@ -176,6 +217,9 @@ type PostgreSQLPatchRequest struct {
 		Type      *string   `json:"type,omitempty"`
 	} `json:"service_config,omitempty"`
 }
+
+// PostgreSQLPatchRequestApplicationConfigFeatures defines model for PostgreSQLPatchRequest.ApplicationConfig.Features.
+type PostgreSQLPatchRequestApplicationConfigFeatures string
 
 // PostgreSQLPrivateNetworking defines model for PostgreSQLPrivateNetworking.
 type PostgreSQLPrivateNetworking struct {
@@ -320,6 +364,9 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 
 // The interface specification for the client above.
 type ClientInterface interface {
+	// ListFeatures request
+	ListFeatures(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListPostgreSQLs request
 	ListPostgreSQLs(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -352,6 +399,18 @@ type ClientInterface interface {
 
 	// ListPostgreSQLVersions request
 	ListPostgreSQLVersions(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+}
+
+func (c *Client) ListFeatures(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListFeaturesRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
 }
 
 func (c *Client) ListPostgreSQLs(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -496,6 +555,33 @@ func (c *Client) ListPostgreSQLVersions(ctx context.Context, orgId string, proje
 		return nil, err
 	}
 	return c.Client.Do(req)
+}
+
+// NewListFeaturesRequest generates requests for ListFeatures
+func NewListFeaturesRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v2/options/databases/postgresql/features")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
 }
 
 // NewListPostgreSQLsRequest generates requests for ListPostgreSQLs
@@ -977,6 +1063,9 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
+	// ListFeaturesWithResponse request
+	ListFeaturesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListFeaturesResponse, error)
+
 	// ListPostgreSQLsWithResponse request
 	ListPostgreSQLsWithResponse(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*ListPostgreSQLsResponse, error)
 
@@ -1009,6 +1098,65 @@ type ClientWithResponsesInterface interface {
 
 	// ListPostgreSQLVersionsWithResponse request
 	ListPostgreSQLVersionsWithResponse(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*ListPostgreSQLVersionsResponse, error)
+}
+
+type ListFeaturesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *map[string]string
+	JSON500      *struct {
+		// Code HTTP status code
+		Code int64 `json:"code"`
+
+		// Msg Error message
+		Msg string `json:"msg"`
+
+		// Status HTTP status
+		Status string `json:"status"`
+	}
+	ApplicationproblemJSON500 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
+	}
+}
+
+// Status returns HTTPResponse.Status
+func (r ListFeaturesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListFeaturesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListFeaturesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
 }
 
 type ListPostgreSQLsResponse struct {
@@ -2149,6 +2297,15 @@ func (r ListPostgreSQLVersionsResponse) ContentType() string {
 	return ""
 }
 
+// ListFeaturesWithResponse request returning *ListFeaturesResponse
+func (c *ClientWithResponses) ListFeaturesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListFeaturesResponse, error) {
+	rsp, err := c.ListFeatures(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListFeaturesResponse(rsp)
+}
+
 // ListPostgreSQLsWithResponse request returning *ListPostgreSQLsResponse
 func (c *ClientWithResponses) ListPostgreSQLsWithResponse(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*ListPostgreSQLsResponse, error) {
 	rsp, err := c.ListPostgreSQLs(ctx, orgId, projectId, reqEditors...)
@@ -2252,6 +2409,73 @@ func (c *ClientWithResponses) ListPostgreSQLVersionsWithResponse(ctx context.Con
 		return nil, err
 	}
 	return ParseListPostgreSQLVersionsResponse(rsp)
+}
+
+// ParseListFeaturesResponse parses an HTTP response from a ListFeaturesWithResponse call
+func ParseListFeaturesResponse(rsp *http.Response) (*ListFeaturesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListFeaturesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest map[string]string
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
 }
 
 // ParseListPostgreSQLsResponse parses an HTTP response from a ListPostgreSQLsWithResponse call
