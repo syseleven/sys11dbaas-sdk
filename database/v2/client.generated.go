@@ -364,9 +364,6 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 
 // The interface specification for the client above.
 type ClientInterface interface {
-	// ListFeatures request
-	ListFeatures(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
-
 	// ListPostgreSQLs request
 	ListPostgreSQLs(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -391,6 +388,9 @@ type ClientInterface interface {
 
 	UpdatePostgreSQL(ctx context.Context, orgId string, projectId string, dbUuid string, body UpdatePostgreSQLJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ListFeatures request
+	ListFeatures(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListPostgreSQLFlavors request
 	ListPostgreSQLFlavors(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -399,18 +399,6 @@ type ClientInterface interface {
 
 	// ListPostgreSQLVersions request
 	ListPostgreSQLVersions(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error)
-}
-
-func (c *Client) ListFeatures(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewListFeaturesRequest(c.Server)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
 }
 
 func (c *Client) ListPostgreSQLs(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -521,6 +509,18 @@ func (c *Client) UpdatePostgreSQL(ctx context.Context, orgId string, projectId s
 	return c.Client.Do(req)
 }
 
+func (c *Client) ListFeatures(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListFeaturesRequest(c.Server, orgId, projectId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 func (c *Client) ListPostgreSQLFlavors(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListPostgreSQLFlavorsRequest(c.Server, orgId, projectId)
 	if err != nil {
@@ -555,33 +555,6 @@ func (c *Client) ListPostgreSQLVersions(ctx context.Context, orgId string, proje
 		return nil, err
 	}
 	return c.Client.Do(req)
-}
-
-// NewListFeaturesRequest generates requests for ListFeatures
-func NewListFeaturesRequest(server string) (*http.Request, error) {
-	var err error
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v2/options/databases/postgresql/features")
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
 }
 
 // NewListPostgreSQLsRequest generates requests for ListPostgreSQLs
@@ -897,6 +870,47 @@ func NewUpdatePostgreSQLRequestWithBody(server string, orgId string, projectId s
 	return req, nil
 }
 
+// NewListFeaturesRequest generates requests for ListFeatures
+func NewListFeaturesRequest(server string, orgId string, projectId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "org_id", orgId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "project_id", projectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/%s/%s/v2/options/databases/postgresql/features", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewListPostgreSQLFlavorsRequest generates requests for ListPostgreSQLFlavors
 func NewListPostgreSQLFlavorsRequest(server string, orgId string, projectId string) (*http.Request, error) {
 	var err error
@@ -1063,9 +1077,6 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
-	// ListFeaturesWithResponse request
-	ListFeaturesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListFeaturesResponse, error)
-
 	// ListPostgreSQLsWithResponse request
 	ListPostgreSQLsWithResponse(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*ListPostgreSQLsResponse, error)
 
@@ -1090,6 +1101,9 @@ type ClientWithResponsesInterface interface {
 
 	UpdatePostgreSQLWithResponse(ctx context.Context, orgId string, projectId string, dbUuid string, body UpdatePostgreSQLJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdatePostgreSQLResponse, error)
 
+	// ListFeaturesWithResponse request
+	ListFeaturesWithResponse(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*ListFeaturesResponse, error)
+
 	// ListPostgreSQLFlavorsWithResponse request
 	ListPostgreSQLFlavorsWithResponse(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*ListPostgreSQLFlavorsResponse, error)
 
@@ -1098,65 +1112,6 @@ type ClientWithResponsesInterface interface {
 
 	// ListPostgreSQLVersionsWithResponse request
 	ListPostgreSQLVersionsWithResponse(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*ListPostgreSQLVersionsResponse, error)
-}
-
-type ListFeaturesResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *map[string]string
-	JSON500      *struct {
-		// Code HTTP status code
-		Code int64 `json:"code"`
-
-		// Msg Error message
-		Msg string `json:"msg"`
-
-		// Status HTTP status
-		Status string `json:"status"`
-	}
-	ApplicationproblemJSON500 *struct {
-		// Detail A human-readable explanation specific to this occurrence of the problem.
-		Detail *string `json:"detail,omitempty"`
-
-		// Errors Optional list of individual error details
-		Errors *[]ErrorDetail `json:"errors,omitempty"`
-
-		// Instance A URI reference that identifies the specific occurrence of the problem.
-		Instance *string `json:"instance,omitempty"`
-
-		// Status HTTP status code
-		Status *int64 `json:"status,omitempty"`
-
-		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
-		Title *string `json:"title,omitempty"`
-
-		// Type A URI reference to human-readable documentation for the error.
-		Type *string `json:"type,omitempty"`
-	}
-}
-
-// Status returns HTTPResponse.Status
-func (r ListFeaturesResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r ListFeaturesResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r ListFeaturesResponse) ContentType() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Header.Get("Content-Type")
-	}
-	return ""
 }
 
 type ListPostgreSQLsResponse struct {
@@ -2000,6 +1955,65 @@ func (r UpdatePostgreSQLResponse) ContentType() string {
 	return ""
 }
 
+type ListFeaturesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *map[string]string
+	JSON500      *struct {
+		// Code HTTP status code
+		Code int64 `json:"code"`
+
+		// Msg Error message
+		Msg string `json:"msg"`
+
+		// Status HTTP status
+		Status string `json:"status"`
+	}
+	ApplicationproblemJSON500 *struct {
+		// Detail A human-readable explanation specific to this occurrence of the problem.
+		Detail *string `json:"detail,omitempty"`
+
+		// Errors Optional list of individual error details
+		Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+		// Instance A URI reference that identifies the specific occurrence of the problem.
+		Instance *string `json:"instance,omitempty"`
+
+		// Status HTTP status code
+		Status *int64 `json:"status,omitempty"`
+
+		// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+		Title *string `json:"title,omitempty"`
+
+		// Type A URI reference to human-readable documentation for the error.
+		Type *string `json:"type,omitempty"`
+	}
+}
+
+// Status returns HTTPResponse.Status
+func (r ListFeaturesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListFeaturesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListFeaturesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListPostgreSQLFlavorsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -2297,15 +2311,6 @@ func (r ListPostgreSQLVersionsResponse) ContentType() string {
 	return ""
 }
 
-// ListFeaturesWithResponse request returning *ListFeaturesResponse
-func (c *ClientWithResponses) ListFeaturesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListFeaturesResponse, error) {
-	rsp, err := c.ListFeatures(ctx, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseListFeaturesResponse(rsp)
-}
-
 // ListPostgreSQLsWithResponse request returning *ListPostgreSQLsResponse
 func (c *ClientWithResponses) ListPostgreSQLsWithResponse(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*ListPostgreSQLsResponse, error) {
 	rsp, err := c.ListPostgreSQLs(ctx, orgId, projectId, reqEditors...)
@@ -2384,6 +2389,15 @@ func (c *ClientWithResponses) UpdatePostgreSQLWithResponse(ctx context.Context, 
 	return ParseUpdatePostgreSQLResponse(rsp)
 }
 
+// ListFeaturesWithResponse request returning *ListFeaturesResponse
+func (c *ClientWithResponses) ListFeaturesWithResponse(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*ListFeaturesResponse, error) {
+	rsp, err := c.ListFeatures(ctx, orgId, projectId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListFeaturesResponse(rsp)
+}
+
 // ListPostgreSQLFlavorsWithResponse request returning *ListPostgreSQLFlavorsResponse
 func (c *ClientWithResponses) ListPostgreSQLFlavorsWithResponse(ctx context.Context, orgId string, projectId string, reqEditors ...RequestEditorFn) (*ListPostgreSQLFlavorsResponse, error) {
 	rsp, err := c.ListPostgreSQLFlavors(ctx, orgId, projectId, reqEditors...)
@@ -2409,73 +2423,6 @@ func (c *ClientWithResponses) ListPostgreSQLVersionsWithResponse(ctx context.Con
 		return nil, err
 	}
 	return ParseListPostgreSQLVersionsResponse(rsp)
-}
-
-// ParseListFeaturesResponse parses an HTTP response from a ListFeaturesWithResponse call
-func ParseListFeaturesResponse(rsp *http.Response) (*ListFeaturesResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &ListFeaturesResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 500:
-		var dest struct {
-			// Code HTTP status code
-			Code int64 `json:"code"`
-
-			// Msg Error message
-			Msg string `json:"msg"`
-
-			// Status HTTP status
-			Status string `json:"status"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 500:
-		var dest struct {
-			// Detail A human-readable explanation specific to this occurrence of the problem.
-			Detail *string `json:"detail,omitempty"`
-
-			// Errors Optional list of individual error details
-			Errors *[]ErrorDetail `json:"errors,omitempty"`
-
-			// Instance A URI reference that identifies the specific occurrence of the problem.
-			Instance *string `json:"instance,omitempty"`
-
-			// Status HTTP status code
-			Status *int64 `json:"status,omitempty"`
-
-			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
-			Title *string `json:"title,omitempty"`
-
-			// Type A URI reference to human-readable documentation for the error.
-			Type *string `json:"type,omitempty"`
-		}
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.ApplicationproblemJSON500 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest map[string]string
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON200 = &dest
-
-	}
-
-	return response, nil
 }
 
 // ParseListPostgreSQLsResponse parses an HTTP response from a ListPostgreSQLsWithResponse call
@@ -3637,6 +3584,73 @@ func ParseUpdatePostgreSQLResponse(rsp *http.Response) (*UpdatePostgreSQLRespons
 			return nil, err
 		}
 		response.JSON504 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListFeaturesResponse parses an HTTP response from a ListFeaturesWithResponse call
+func ParseListFeaturesResponse(rsp *http.Response) (*ListFeaturesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListFeaturesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.Header.Get("Content-Type") == "application/json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Code HTTP status code
+			Code int64 `json:"code"`
+
+			// Msg Error message
+			Msg string `json:"msg"`
+
+			// Status HTTP status
+			Status string `json:"status"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case rsp.Header.Get("Content-Type") == "application/problem+json" && rsp.StatusCode == 500:
+		var dest struct {
+			// Detail A human-readable explanation specific to this occurrence of the problem.
+			Detail *string `json:"detail,omitempty"`
+
+			// Errors Optional list of individual error details
+			Errors *[]ErrorDetail `json:"errors,omitempty"`
+
+			// Instance A URI reference that identifies the specific occurrence of the problem.
+			Instance *string `json:"instance,omitempty"`
+
+			// Status HTTP status code
+			Status *int64 `json:"status,omitempty"`
+
+			// Title A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			Title *string `json:"title,omitempty"`
+
+			// Type A URI reference to human-readable documentation for the error.
+			Type *string `json:"type,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.ApplicationproblemJSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest map[string]string
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	}
 

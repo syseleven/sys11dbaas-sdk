@@ -58,8 +58,8 @@ func (c *TypedClient) GetPostgreSQL(ctx context.Context, orgId string, projectId
 	return *resp.JSON200, nil
 }
 
-func (c *TypedClient) ListFeatures(ctx context.Context) (map[string]string, error) {
-	resp, err := c.cwr.ListFeaturesWithResponse(ctx)
+func (c *TypedClient) ListFeatures(ctx context.Context, orgId string, projectId string) (map[string]string, error) {
+	resp, err := c.cwr.ListFeaturesWithResponse(ctx, orgId, projectId)
 	if err != nil {
 		return map[string]string{}, fmt.Errorf("failed to invoke request: %w", err)
 	}
