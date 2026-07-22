@@ -22,6 +22,24 @@ const (
 	StaticAuthScopes   staticAuthContextKey   = "StaticAuth.Scopes"
 )
 
+// Defines values for FeatureDefault.
+const (
+	FeatureDefaultOff FeatureDefault = "off"
+	FeatureDefaultOn  FeatureDefault = "on"
+)
+
+// Valid indicates whether the value is a known member of the FeatureDefault enum.
+func (e FeatureDefault) Valid() bool {
+	switch e {
+	case FeatureDefaultOff:
+		return true
+	case FeatureDefaultOn:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for PostgreSQLApplicationConfigFeatures.
 const (
 	PostgreSQLApplicationConfigFeaturesOff PostgreSQLApplicationConfigFeatures = "off"
@@ -42,16 +60,16 @@ func (e PostgreSQLApplicationConfigFeatures) Valid() bool {
 
 // Defines values for PostgreSQLPatchRequestApplicationConfigFeatures.
 const (
-	PostgreSQLPatchRequestApplicationConfigFeaturesOff PostgreSQLPatchRequestApplicationConfigFeatures = "off"
-	PostgreSQLPatchRequestApplicationConfigFeaturesOn  PostgreSQLPatchRequestApplicationConfigFeatures = "on"
+	Off PostgreSQLPatchRequestApplicationConfigFeatures = "off"
+	On  PostgreSQLPatchRequestApplicationConfigFeatures = "on"
 )
 
 // Valid indicates whether the value is a known member of the PostgreSQLPatchRequestApplicationConfigFeatures enum.
 func (e PostgreSQLPatchRequestApplicationConfigFeatures) Valid() bool {
 	switch e {
-	case PostgreSQLPatchRequestApplicationConfigFeaturesOff:
+	case Off:
 		return true
-	case PostgreSQLPatchRequestApplicationConfigFeaturesOn:
+	case On:
 		return true
 	default:
 		return false
@@ -84,6 +102,24 @@ type ErrorDetail struct {
 	// Value The value at the given location
 	Value interface{} `json:"value,omitempty"`
 }
+
+// Feature defines model for Feature.
+type Feature struct {
+	// Default Feature default state
+	Default FeatureDefault `json:"default"`
+
+	// Description Feature description
+	Description string `json:"description"`
+
+	// Id Feature identifier
+	Id string `json:"id"`
+
+	// Name Human readable feature name
+	Name string `json:"name"`
+}
+
+// FeatureDefault Feature default state
+type FeatureDefault string
 
 // Flavor defines model for Flavor.
 type Flavor struct {
@@ -1958,7 +1994,7 @@ func (r UpdatePostgreSQLResponse) ContentType() string {
 type ListFeaturesResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *map[string]string
+	JSON200      *[]Feature
 	JSON500      *struct {
 		// Code HTTP status code
 		Code int64 `json:"code"`
@@ -3646,7 +3682,7 @@ func ParseListFeaturesResponse(rsp *http.Response) (*ListFeaturesResponse, error
 		response.ApplicationproblemJSON500 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest map[string]string
+		var dest []Feature
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

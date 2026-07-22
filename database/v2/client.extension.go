@@ -58,14 +58,14 @@ func (c *TypedClient) GetPostgreSQL(ctx context.Context, orgId string, projectId
 	return *resp.JSON200, nil
 }
 
-func (c *TypedClient) ListFeatures(ctx context.Context, orgId string, projectId string) (map[string]string, error) {
+func (c *TypedClient) ListFeatures(ctx context.Context, orgId string, projectId string) ([]Feature, error) {
 	resp, err := c.cwr.ListFeaturesWithResponse(ctx, orgId, projectId)
 	if err != nil {
-		return map[string]string{}, fmt.Errorf("failed to invoke request: %w", err)
+		return nil, fmt.Errorf("failed to invoke request: %w", err)
 	}
 	if resp.StatusCode() != http.StatusOK {
 		err := fmt.Errorf("got invalid response: %s: %s", resp.Status(), string(resp.Body))
-		return map[string]string{}, err
+		return nil, err
 	}
 	return *resp.JSON200, nil
 }
