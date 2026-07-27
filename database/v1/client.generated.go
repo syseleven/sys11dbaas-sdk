@@ -138,11 +138,16 @@ type PostgreSQLPatchRequest struct {
 	// Schema A URL to the JSON Schema for this object.
 	Schema            *string `json:"$schema,omitempty"`
 	ApplicationConfig *struct {
-		Features          *map[string]PostgreSQLPatchRequestApplicationConfigFeatures `json:"features,omitempty"`
-		Hostname          *string                                                     `json:"hostname,omitempty"`
-		Instances         *int64                                                      `json:"instances,omitempty"`
-		IpAddress         *string                                                     `json:"ip_address,omitempty"`
-		Password          *string                                                     `json:"password,omitempty"`
+		Features   *map[string]PostgreSQLPatchRequestApplicationConfigFeatures `json:"features,omitempty"`
+		Hostname   *string                                                     `json:"hostname,omitempty"`
+		Instances  *int64                                                      `json:"instances,omitempty"`
+		IpAddress  *string                                                     `json:"ip_address,omitempty"`
+		Parameters *struct {
+			LogConnections    *string `json:"log_connections,omitempty"`
+			LogDisconnections *string `json:"log_disconnections,omitempty"`
+			MaxConnections    *string `json:"max_connections,omitempty"`
+		} `json:"parameters,omitempty"`
+		Password          *string `json:"password,omitempty"`
 		PrivateNetworking *struct {
 			AllowedCidrs     *[]string `json:"allowed_cidrs,omitempty"`
 			Enabled          *bool     `json:"enabled,omitempty"`
