@@ -134,7 +134,7 @@ type PostgreSQLApplicationConfig struct {
 	Hostname          *string                                         `json:"hostname,omitempty"`
 	Instances         *int64                                          `json:"instances"`
 	IpAddress         *string                                         `json:"ip_address,omitempty"`
-	Parameters        PostgreSQLParametersRequest                     `json:"parameters"`
+	Parameters        *PostgreSQLParametersRequest                    `json:"parameters,omitempty"`
 	Password          string                                          `json:"password"`
 	PrivateNetworking *PostgreSQLPrivateNetworking                    `json:"private_networking,omitempty"`
 	PublicNetworking  *PostgreSQLPublicNetworking                     `json:"public_networking,omitempty"`
